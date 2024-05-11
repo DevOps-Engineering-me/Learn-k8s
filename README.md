@@ -1,5 +1,6 @@
 # Architecture Of Kubernetes.
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/bf5a1e2f-769b-4126-b58f-c64c258e5bd7)
+![1](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/c41f78a8-4396-4721-aea1-44be7183a4ee)
+
 
 ### Let's Understand one by One.
 Kubernetes Cluster have 2 type of node
@@ -26,7 +27,8 @@ So when you use kubectl to manage the cluster, at the backend you are actually c
 
 The communication between the API server and other components in the cluster happens over **TLS** to prevent unauthorized access to the cluster.
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/dfbb654a-0c0e-462f-b519-83704515ccdd)
+![2](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/5e08da84-9dd7-4aef-8355-255e8deb08c5)
+
 
 **Kubernetes api-server is responsible for the following.**
 
@@ -59,7 +61,8 @@ In a nutshell, here is what you need to know about etcd.
 - etcd exposes key-value API using gRPC. Also, the gRPC gateway is a RESTful proxy that translates all the HTTP API calls into gRPC messages. This makes it an ideal database for Kubernetes.
 - etcd stores all objects under the **/registry** directory key in key-value format. For example, information on a pod named Nginx in the default namespace can be found under **/registry/pods/default/nginx**
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/7026a638-9380-4f73-a7a6-c259afae418f)
+![3](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/bb6b7811-cf97-4fc3-b159-75312a85eaf6)
+
 
 
 ### **3) kube-scheduler**
@@ -69,7 +72,8 @@ When you deploy a pod, you specify the pod requirements such as CPU, memory, aff
 
 The following image shows a high-level overview of **how the scheduler works.**
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/7e9135a7-ac7e-4477-affe-6a923a6571f1)
+![4](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/b7ebee63-5fd3-4986-96f8-bfebcab5fae9)
+
 
 In a Kubernetes cluster, there will be more than one worker node. So how does the scheduler select the node out of all worker nodes?
 
@@ -97,7 +101,8 @@ Let’s say you want to create a deployment, you specify the desired state in th
 
 Kube controller manager is a component that manages all the Kubernetes controllers. Kubernetes resources/objects like pods, namespaces, jobs, replicaset are managed by respective controllers. Also, the Kube scheduler is also a controller managed by the Kube controller manager.
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/eb41e7f2-16d6-4057-a9fe-f54fb7ad20e8)
+![5](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/11aa38c8-1981-449f-8c91-b05823c91b1d)
+
 
 **Following is the list of important built-in Kubernetes controllers.**
 
@@ -122,7 +127,8 @@ When kubernetes is deployed in cloud environments, the cloud controller manager 
 
 This way the core kubernetes core components can work independently and allow the cloud providers to integrate with kubernetes using plugins. (For example, an interface between kubernetes cluster and AWS cloud API)
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/0ec23023-df8b-4709-ac10-033e0d0d47a6)
+![6](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/37524164-3237-4564-9b66-e72ec9fcb541)
+
 
 Cloud Controller Manager contains a set of cloud platform-specific controllers that ensure the desired state of cloud-specific components (nodes, Loadbalancers, storage, etc). Following are the three main controllers that are part of the cloud controller manager.
 
@@ -177,7 +183,8 @@ While bootstrapping the control plane, kubelet starts the api-server, scheduler,
 - Uses the CSI (container storage interface) gRPC to configure block volumes.
 - It uses the CNI plugin configured in the cluster to allocate the pod IP address and set up any necessary network routes and firewall rules for the pod.
 
- ![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/2c87cb0d-1446-42ef-afce-258a20ab6557)
+![7](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/93a1513b-e0d5-4769-b11a-093f383c9ad6)
+
 
 ### **2)Kube proxy**
 
@@ -219,7 +226,8 @@ Kube-proxy then uses any one of the following modes to create/update rules for r
 - **Userspace** (legacy & not recommended)
 - **Kernelspace**: This mode is only for Windows systems.
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/ca6509b6-3ba3-41fc-b740-86c8956c21c6)
+![8](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/70723aaa-cbd6-4f63-a3df-3375fa663395)
+
 
 
 ## **3)Container Runtime**
@@ -240,7 +248,8 @@ As we learned in the Kubelet section, the kubelet agent is responsible for inter
 
 Let’s take an example of CRI-O container runtime interface. Here is a high-level overview of how container runtime works with kubernetes.
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/4454d6c7-496f-4351-9f40-a254bf02f568)
+![9](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/5da97eeb-71b4-456c-bb57-6b1677f7e5d4)
+
 
 - When there is a new request for a pod from the API server, the kubelet talks to CRI-O daemon to launch the required containers via Kubernetes Container Runtime Interface.
 - CRI-O checks and pulls the required container image from the configured container registry using containers/image library.
