@@ -1,102 +1,157 @@
-# Learn Why-k8s
+# Ingress
+**Ingress is a Kubernetes resource that manages external access to services within a cluster, typically HTTP/HTTPS. It provides a unified way to define routing rules, SSL termination, and virtual hosts.**
+
+## Why Ingress?
+**It's Helps**
+
+- **Centralized Routing:** Manage all external traffic routing in one place.
+- **SSL Termination:** Handle SSL/TLS termination for secure communication.
+- **Load Balancing:** Distribute traffic evenly across multiple pods.
+- **Path-Based Routing:** Route traffic to different services based on URL paths.
+- **Host-Based Routing:** Serve multiple applications using the same IP address based on the host header.
+
+## Components of Ingress
+
+**1) Ingress Resource:**
+- Defines the rules for routing traffic.
+- an specify multiple rules for different hosts and paths.
+
+**2) Ingress Controller:**
+- Manages the Ingress resources.
+- Implements the actual routing and load balancing.
+- Common controllers include Nginx, Traefik, and HAProxy.
 
 
-## Why Do We Use Kubernetes?
-One of the benefits of Kubernetes is that it makes building and running complex applications much simpler. Here’s a handful of the many Kubernetes features:
+## Let's take Demo with real world 
 
-- Standard services like local DNS and basic load-balancing that most applications need, and are easy to use.
-- Standard behaviors (e.g., restart this container if it dies) that are easy to invoke, and do most of the work of keeping applications running, available,   and performant.
-- A standard set of abstract “objects” (called things like “pods,” “replicasets,” and “deployments”) that wrap around containers and make it easy to build configurations around collections of containers.
-
-## Key Features of Kubernetes
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/e7a386a3-ddf8-4648-ac9f-eed255a4c4bd)
-
-### 1) Scalability
-If there's one thing Kubernetes is really, really good at, it's scalability. For workloads large, small and in-between, Kubernetes works equally well.
-
-You can operate a single cluster or dozens with Kubernetes. You can deploy workloads using a single-node cluster that runs on your laptop, or you can build your production-grade Kubernetes clusters using thousands of nodes spread across multiple data centers. You can host a single app in Kubernetes or thousands.
-
-On balance, we should note that there are some limitations to Kubernetes scalability. Your cluster can't have more than 5,000 nodes, for example, and you're limited to 300,000 containers. But it's a safe bet that at least 99.5 percent of Kubernetes use cases can work within these scalability constraints.
-
-### 2) Container Orchestration
-The ability to orchestrate containers is another key feature in Kubernetes. Container orchestration means pulling container images from a registry, then provisioning, deploying and scaling containers on the servers that host them.
-
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/d4ca045b-bd30-4f00-a9ec-7c315fdd66a9)
-
-This feature is crucial because orchestrating containers by hand is not just feasible at scale. If you tried to download container images by hand, then decide which servers should host which containers manually, and you also attempted to update your deployment configuration in response to shifts in workload performance or request rates, you'd quickly find that doing so for more than just a handful of containers is not practical.
-
-But with Kubernetes, you can outsource the hard work of container orchestration to the Kubernetes control plane, making it easy to manage your containerized applications whether you have a couple containers to run, or a couple thousand.
-
-### 3) Storage Orchestration
-Storage orchestration is another important Kubernetes feature, at least for any team that runs stateful apps – meaning apps that need to store data persistently. Through storage orchestration, Kubernetes automatically connects containers that need storage resources to the infrastructure that can provide it.
-
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/30e145ae-d75c-46df-a722-0ee374257623)
-
-The exact way Kubernetes does this will vary depending on factors like which type of storage infrastructure you're using and what your containers are using it for. Writing logs files to a local storage volume is different from pushing massive amounts of data to a MySQL database, for example. Either way, Kubernetes's storage orchestration features make it possible to do what you need.
-
-### 4) Self-Healing
-Kubernetes offers self-healing features that help workloads recover autonomously when something goes wrong. If it detects failed containers or Pods, for instance, Kubernetes will automatically attempt to restart them. Likewise, if a node becomes unreachable, Kubernetes will automatically try to reschedule any workloads it was hosting to other, healthy nodes.
-
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/a3075a27-9ce4-45eb-a12f-4e03798e459e)
-
-Self-healing features are a big deal because they allow Kubernetes environments to recover from many types of failure without waiting for human engineers to step in and save the day. Kubernetes can't automatically fix major issues, such as file corruption in container images or the failure of all of a cluster's control-plane nodes, but it can handle many routine problems on its own.
+![ingress](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/8ac9f869-9a16-482e-9cf5-6000758a0760)
 
 
-### 5) Service Discovery and Load Balancing
-Workloads orchestrated by Kubernetes don't require engineers to define most network services or configure load balancing manually. Instead, Kubernetes automatically exposes applications as network services and balances traffic between them.
 
-Without this feature, admins would have to assign network addresses to each Pod or container, tell other Pods and containers what those addresses are, and configure networking rules that balance traffic between all of them. That would require a huge amount of effort, and it wouldn't scale. Fortunately, since Kubernetes does most of this work automatically, service discovery and load balancing at scale are simple.
+**1) Enable Ingress in Minikube:**
+   ```
+   minikube addons enable ingress
+   ```
+**2) Define Kubernetes Resources:**
+   - Deployment: Manages the application pods.
+   - Service: Exposes the application pods internally within the cluster.
+   - Ingress: Defines how external traffic is routed to the services.
 
-### 6) Rolling Updates and Rollbacks
-If you want to update an application in a Kubernetes environment, you don't have to take it offline, deploy the update, and then restore service. Instead, thanks to Kubernetes's built-in rolling updates feature, you can incrementally apply updates by replacing older versions of Pods with new ones, until all have been updated. You can perform rollbacks (meaning the reversion to an earlier version of an application) in a similar fashion.
+**Example Configurations**
 
-In addition to saving time and effort on the part of Kubernetes admins, this feature benefits users because it minimizes the risk of downtime or disruption due to app updates.
+**Deployment (deployment.yaml)**
 
-## Top Kubernetes Benefits
-### 1) Easy Deployment and Updates
-It would be wrong to say that deploying or updating Kubernetes is always easy. On the contrary, Kubernetes is very complex, and setting it up from scratch entirely on your own takes a ton of work.
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-portfolio
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-portfolio
+  template:
+    metadata:
+      labels:
+        app: my-portfolio
+    spec:
+      containers:
+      - name: my-portfolio
+        image: youknowwhoitssaymon/my-portfolio:latest
+        ports:
+        - containerPort: 80
+```
 
-However, as of 2024, there are plenty of approaches to Kubernetes deployment and updates that make the process simple. You could use a managed Kubernetes service, like EKS or AKS, to run containers using Kubernetes without having to deploy a control plane or set up host infrastructure yourself. Kubernetes deployment and management platforms like Rancher and OpenShift also make for a simple process.
 
-And once Kubernetes is up and running, deploying apps and application updates is a breeze: In most cases, you simply write some YAML code that tells Kubernetes what you want to run and how to run it, and it does the rest.
+**Service (service.yaml)**
 
-### 2) App Stability and Availability in a Cloud Environment
-Kubernetes also does a great job of keeping applications stable and available once they're running.
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-portfolio-service
+spec:
+  type: ClusterIP
+  selector:
+    app: my-portfolio
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+```
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/538d1ee9-0114-4f44-a038-3875ddebbe13)
+**Ingress (ingress.yaml)**
 
-Again, it's not magic, and it can't do things like recover an environment whose underlying infrastructure has totally failed – which is why it's also important to have a Kubernetes observability and monitoring strategy in place to catch major failures. But it can automatically deploy and scale applications in ways that help them to maintain maximum availability and performance levels, even in complex cloud environments where conditions are always changing.
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-portfolio-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: my-portfolio.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-portfolio-service
+            port:
+              number: 80
+```
 
-### 3) Multi-Cloud Capability
 
-Kubernetes can run virtually anywhere – on any public cloud, in a private cloud or on simple on-prem servers. This makes Kubernetes a great solution if you want to deploy containerized applications on multiple clouds.
+## Traffic Flow in Ingress
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/86d7fad3-6e29-4d1c-b247-90040b9e37ab)
+**1)DNS Resolution:**
 
-It's worth noting that running multi-cloud Kubernetes can be somewhat challenging. Some Kubernetes distributions or services, like EKS and AKS, don't work with other clouds, and managing Kubernetes clusters spread across multiple clouds through a single control plane requires special network configurations.
+- Client sends a request to http://my-portfolio.local.
+- The local DNS resolves my-portfolio.local to the Minikube IP address.
 
-That said, multi-cloud architectures are complex no matter how you orchestrate containerized applications. Ultimately, Kubernetes is arguably the best way to take advantage of multiple clouds, since it can manage and scale multi-cloud workloads in a consistent way once it's configured to do so.
+**2)Ingress Controller:**
 
-### 4) Portability Across Cloud Providers
-The fact that Kubernetes works consistently across cloud providers and is free in most cases from vendor lock in is also a benefit for organizations that switch between clouds, not just those who use multiple clouds at once. If you deploy your workloads using Kubernetes, you can typically move them to a different cloud without having to overhaul your apps or configuration.
+- The request reaches the Nginx Ingress Controller running in the Minikube cluster.
+- The Ingress Controller inspects the host and path of the request.
+  
+**3)Ingress Resource:**
 
-Some adjustments may be necessary, especially if you are using a particular cloud provider's managed Kubernetes service. But in general, Kubernetes offers a degree of portability that alternative container orchestration platform options can't match.
+- The Ingress resource defines routing rules based on the host (my-portfolio.local) and path (/).
+- Matches the incoming request to the correct backend service (my-portfolio-service).
 
-### 5) Availability of Resources Online
-Because Kubernetes is the most popular container orchestration tool, there is a dynamic Kubernetes community that produces excellent resources online, including information, management tools, and extensions.
 
-In addition to the excellent Kubernetes documentation, admins can benefit from a plethora of third-party Kubernetes guides and tutorials. They can also find a wide range of Kubernetes add-ons, as well as apps ready to be deployed on Kubernetes, on GitHub and similar repositories.
-### 6) Cost-Effectiveness
-As an open source solution, the Kubernetes platform is free of cost. You might pay fees if you use a Kubernetes management service, but they are typically minimal; for example, EKS charges a cluster management fee of just $2.40 per day – which is not a lot when you're deploying hundreds of containers.
+**4)Service:**
 
-At the same time, Kubernetes's ability to manage and scale apps across a cluster of servers efficiently can save money because it helps to make the most of the infrastructure available. Without Kubernetes, you might have some servers sitting idle because they are not hosting any apps while others are maxing out their resources because they are hosting too many. But Kubernetes helps you strike the ideal balance.
+- The service routes the request to one of the pods running the application.
+- Load balances traffic among available pods.
 
-Both of these benefits combine to make Kubernetes a cost-effective way to deploy and manage applications. You get a free or low-cost tool that optimizes the resource efficiency of your apps and infrastructure. And when you invest in Kubernetes cost optimization, which helps prevent unnecessary Kubernetes spending, you get even more value from the orchestrator.
+**5)Pod:**
 
-### 7) Increased DevOps Efficiency for Microservices Architecture
-Kubernetes helps DevOps teams work more efficiently, too. With Kubernetes, DevOps engineers can build, test, and deploy microservices apps in the same platform. This benefit eliminates the headache and risk that occur when apps developed in one platform have to move to a different one for production.
+- The selected pod processes the request.
+- The pod serves the response back to the client through the service and ingress controller.
 
-![image](https://github.com/Diligite-HRM/hrm_dlg_backend/assets/68004638/bb0d3926-df9b-44e6-b088-659bfac6b96d)
 
-We're not saying Kubernetes alone makes all aspects of DevOps efficient and simple. But when it comes to app development and deployment, it does add efficiency and lower the risk of problems that could disrupt application release cycles.
+## Updating Local Hosts File
+To access your application via the defined hostname, update your local hosts file:
+
+**1)Get Minikube IP:**
+
+```
+minikube ip
+```
+
+**2)Edit Hosts File:**
+
+Add an entry to your local **hosts** file (usually located at /etc/hosts on macOS/Linux or C:\Windows\System32\drivers\etc\hosts on Windows):
+
+```
+<minikube-ip> my-portfolio.local
+```
+Replace <minikube-ip> with the actual IP address from the minikube ip command.
+
+open on your browser: http://my-portfolio.local.
+
 
