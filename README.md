@@ -24,10 +24,6 @@
 
 ## Let's take Demo with real world 
 
-![ingress](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/8ac9f869-9a16-482e-9cf5-6000758a0760)
-
-
-
 **1) Enable Ingress in Minikube:**
    ```
    minikube addons enable ingress
@@ -106,6 +102,9 @@ spec:
 
 
 ## Traffic Flow in Ingress
+
+![ingress](https://github.com/MdShafiqulSaymon/Portfolio/assets/68004638/8ac9f869-9a16-482e-9cf5-6000758a0760)
+
 
 **1)DNS Resolution:**
 
